@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 增加 MyBatis 日志 -->
+    <settings>
+        <!-- 没想到 name 属性的值必须是 logImpl，否则就找不到  -->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+    <!-- 取别名，此时，pojo 下的类名可以用首字母小写代替 -->
+    <typeAliases>
+        <package name="sharm.pojo"/>
+    </typeAliases>
+
+    <mappers>
+        <mapper resource="sharm/dao/BookMapper.xml"/>
+    </mappers>
+
+</configuration>

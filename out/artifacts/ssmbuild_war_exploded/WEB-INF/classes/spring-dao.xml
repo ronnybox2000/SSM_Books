@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- 配置整合mybatis -->
+    <!-- 1.关联数据库文件 -->
+    <context:property-placeholder location = "classpath:database.properties"/>
+
+    <!-- 2.数据库连接池 -->
+    <!-- 数据库连接池有很多，当然也可以用 Spring 自带的，下面两种也比较常用：
+        dbcp 半自动化操作 不能自动连接
+        c3p0 自动化操作（自动的加载配置文件 并且设置到对象里面）
+        这里我们选择 c3p0。
+    -->
+    <bean id = "dataSource" class = "com.mchange.v2.c3p0.ComboPooledDataSource">
+        <!-- 数据库连接池中核心的四个属性肯定是不变的  -->
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+
+        <!-- 那下面就是 c3p0 自己私有的属性，也可以不加 -->
+        <!-- c3p0连接池的私有属性 -->
+        <property name="initialPoolSize" value="10"/>
+        <property name="maxPoolSize" value="30"/>
+        <property name="minPoolSize" value="10"/>
+        <!-- 关闭连接后不自动commit -->
+        <property name="autoCommitOnClose" value="false"/>
+        <!-- 获取连接超时时间 -->
+        <property name="checkoutTimeout" value="10000"/>
+        <!-- 当获取连接失败重试次数 -->
+        <property name="acquireRetryAttempts" value="2"/>
+    </bean>
+
+    <!-- 3.配置SqlSessionFactory对象 -->
+    <bean id = "sqlSessionFactory" class = "org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- ref是引用（指针），value是 boolean、string等，用 ref 还是 value，需要看源码里这个 name 是什么类型的 -->
+        <!-- 注入数据库连接池 -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 配置 MyBatis 全局配置文件:mybatis-config.xml -->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+
+    <!-- 4.配置扫描Dao接口包，动态实现Dao接口注入到spring容器中 -->
+    <bean class = "org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 注入sqlSessionFactory -->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <!-- 给出需要扫描Dao接口包 -->
+        <property name="basePackage" value="sharm.dao"/>
+    </bean>
+
+</beans>

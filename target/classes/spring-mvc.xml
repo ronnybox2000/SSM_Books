@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context.xsd
+   http://www.springframework.org/schema/mvc
+   https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- 1.自动扫描包，让指定包下的注解生效,由IOC容器统一管理 -->
+    <context:component-scan base-package="sharm.controller" />
+
+    <!-- 2.让 Spring MVC 不处理 html、css 等静态资源，防止资源占用 -->
+    <mvc:default-servlet-handler/>
+
+    <!-- 3.支持mvc注解驱动，这样就不需要写处理器映射器和处理器适配器，
+         而 annotation-driven 配置帮助我们自动完成上述两个实例的注入。-->
+    <mvc:annotation-driven />
+
+    <!-- 4.配置 jsp 显 示ViewResolver 视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+</beans>

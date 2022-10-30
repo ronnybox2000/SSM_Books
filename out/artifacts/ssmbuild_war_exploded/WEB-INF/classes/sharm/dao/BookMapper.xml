@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--关于 MyBatis 的配置文件和针对于接口的配置文件，只需要将 config 改为 mapper 即可。-->
+<mapper namespace="sharm.dao.BookMapper">
+    <!--增加一个Book-->
+    <insert id="addBook" parameterType="book">
+        INSERT INTO ssmbook.book(bookName, bookCount, detail)
+        VALUES(#{bookName}, #{bookCount}, #{detail})
+    </insert>
+
+    <!--根据id删除一个Book-->
+    <delete id="deleteBookById" parameterType="int">
+        DELETE FROM ssmbook.book WHERE bookId=#{bookId}
+    </delete>
+
+    <!--更新Book-->
+    <update id="updateBook" parameterType="book">
+        UPDATE ssmbook.book
+        SET bookName = #{bookName}, bookCount = #{bookCount}, detail = #{detail}
+        WHERE bookId = #{bookId}
+    </update>
+
+    <!-- 根据id查询,返回一个 Book -->
+    <select id="queryBookById" resultType="book">
+        SELECT * FROM ssmbook.book
+        WHERE bookId = #{bookId}
+    </select>
+
+    <!-- 查询全部Book -->
+    <select id="queryAllBook" resultType="book">
+        SELECT * FROM ssmbook.book
+    </select>
+
+    <!-- 根据书籍名查询 Book -->
+    <select id="queryBookByName" parameterType="String" resultType="book">
+        SELECT * FROM ssmbook.book WHERE bookName = #{bookName}
+    </select>
+
+</mapper>
+
+
+
+
